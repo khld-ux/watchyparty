@@ -1,14 +1,39 @@
 const express = require("express");
 const http = require("http");
+const cors = require("cors");
 const { Server } = require("socket.io");
-const path = require("path");
 
 const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
-const PORT = process.env.PORT || 3000;
 
-app.use(express.static(path.join(__dirname, "../client")));
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "http://127.0.0.1:5500",
+  "http://localhost:5500",
+  "https://watchyparty.netlify.app"
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  methods: ["GET", "POST"]
+}));
+
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send("Watchy Party server is running");
+});
+
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: allowedOrigins,
+    methods: ["GET", "POST"]
+  }
+});
+
+const PORT = process.env.PORT || 3000;
 
 const rooms = {};
 
@@ -17,8 +42,8 @@ function ensureRoom(roomId) {
     rooms[roomId] = {
       hostSocketId: null,
       privacy: "public",
-      participants: {}, // socketId -> { userName, role }
-      pending: {} // socketId -> { userName }
+      participants: {},
+      pending: {}
     };
   }
   return rooms[roomId];
@@ -75,12 +100,17 @@ io.on("connection", (socket) => {
 
       socket.join(roomId);
 
-      socket.emit("join-approved", { roomId, privacy: room.privacy });
-
-      io.to(room.hostSocketId).emit("guest-approved", {
-        targetSocketId: socket.id,
-        userName: userName || "Guest"
+      socket.emit("join-approved", {
+        roomId,
+        privacy: room.privacy
       });
+
+      if (room.hostSocketId) {
+        io.to(room.hostSocketId).emit("guest-approved", {
+          targetSocketId: socket.id,
+          userName: userName || "Guest"
+        });
+      }
 
       io.to(roomId).emit("participants-update", safeParticipants(room));
       return;
@@ -90,10 +120,12 @@ io.on("connection", (socket) => {
       userName: userName || "Guest"
     };
 
-    io.to(room.hostSocketId).emit("join-request", {
-      targetSocketId: socket.id,
-      userName: userName || "Guest"
-    });
+    if (room.hostSocketId) {
+      io.to(room.hostSocketId).emit("join-request", {
+        targetSocketId: socket.id,
+        userName: userName || "Guest"
+      });
+    }
   });
 
   socket.on("approve-join", ({ roomId, targetSocketId }) => {
@@ -134,6 +166,7 @@ io.on("connection", (socket) => {
     if (room.hostSocketId !== socket.id) return;
 
     delete room.pending[targetSocketId];
+
     io.to(targetSocketId).emit("join-denied", {
       reason: "Admin rejected your request"
     });
@@ -182,7 +215,6 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     for (const roomId of Object.keys(rooms)) {
       const room = rooms[roomId];
-
       const wasHost = room.hostSocketId === socket.id;
 
       delete room.participants[socket.id];
