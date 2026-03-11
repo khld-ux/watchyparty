@@ -6,16 +6,16 @@ const { Server } = require("socket.io");
 const app = express();
 
 const allowedOrigins = [
+  "https://watchyparty.netlify.app",
   "http://localhost:3000",
   "http://localhost:5173",
   "http://127.0.0.1:5500",
-  "http://localhost:5500",
-  "https://watchyparty.netlify.app"
+  "http://localhost:5500"
 ];
 
 app.use(cors({
   origin: allowedOrigins,
-  methods: ["GET", "POST"]
+  credentials: true
 }));
 
 app.use(express.json());
@@ -29,8 +29,10 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: allowedOrigins,
-    methods: ["GET", "POST"]
-  }
+    methods: ["GET", "POST"],
+    credentials: true
+  },
+  transports: ["websocket", "polling"]
 });
 
 const PORT = process.env.PORT || 3000;
@@ -236,3 +238,4 @@ io.on("connection", (socket) => {
 server.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
 });
+
