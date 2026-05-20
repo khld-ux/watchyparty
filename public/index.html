@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watchy Party</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="login-screen">
+        <h1>Watchy Party</h1>
+        <input type="text" id="username" placeholder="Username">
+        <input type="text" id="room-id" placeholder="Room ID">
+        <div class="buttons">
+            <button id="create-btn">Create Room</button>
+            <button id="join-btn">Join Room</button>
+        </div>
+        <div class="privacy-options">
+            <label>
+                <input type="radio" name="privacy" value="public" checked> Public
+            </label>
+            <label>
+                <input type="radio" name="privacy" value="private"> Private
+            </label>
+        </div>
+    </div>
+
+    <div id="room-screen" style="display: none;">
+        <div class="header">
+            <h2 id="display-room-id">Room: </h2>
+            <div id="host-controls" style="display: none;">
+                <button id="share-screen-btn">Share Screen</button>
+                <select id="privacy-toggle">
+                    <option value="public">Public</option>
+                    <option value="private">Private</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="video-container">
+                <video id="remote-video" autoplay playsinline></video>
+                <video id="local-video" autoplay playsinline muted style="display: none;"></video>
+            </div>
+
+            <div class="sidebar">
+                <div class="participants-list">
+                    <h3>Participants</h3>
+                    <ul id="participants"></ul>
+                </div>
+
+                <div id="join-requests" style="display: none;">
+                    <h3>Join Requests</h3>
+                    <ul id="requests"></ul>
+                </div>
+
+                <div class="chat-container">
+                    <h3>Chat</h3>
+                    <div id="chat-messages"></div>
+                    <form id="chat-form">
+                        <input type="text" id="chat-input" placeholder="Type a message...">
+                        <button type="submit">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
