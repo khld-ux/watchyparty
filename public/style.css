@@ -1,0 +1,182 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+#login-screen {
+    background-color: #2a2a2a;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    text-align: center;
+    width: 300px;
+}
+
+#login-screen h1 {
+    margin-top: 0;
+    color: #007bff;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background-color: #333;
+    color: white;
+    box-sizing: border-box;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1rem;
+}
+
+button {
+    flex: 1;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.privacy-options {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* Room Screen */
+#room-screen {
+    width: 95vw;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #2a2a2a;
+    border-radius: 8px 8px 0 0;
+}
+
+.main-content {
+    display: flex;
+    flex: 1;
+    gap: 10px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.video-container {
+    flex: 3;
+    background-color: #000;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+}
+
+#remote-video {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.sidebar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 350px;
+}
+
+.participants-list, #join-requests, .chat-container {
+    background-color: #2a2a2a;
+    padding: 1rem;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+}
+
+.participants-list {
+    flex: 0.5;
+    overflow-y: auto;
+}
+
+#join-requests {
+    flex: 0.3;
+    overflow-y: auto;
+}
+
+.chat-container {
+    flex: 1;
+    overflow: hidden;
+}
+
+#chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid #444;
+    background-color: #1a1a1a;
+}
+
+#chat-form {
+    display: flex;
+    gap: 5px;
+}
+
+#chat-input {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+#chat-form button {
+    flex: 0;
+    white-space: nowrap;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    padding: 5px 0;
+    border-bottom: 1px solid #444;
+}
+
+.request-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.request-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.approve-btn { background-color: #28a745; }
+.reject-btn { background-color: #dc3545; }
